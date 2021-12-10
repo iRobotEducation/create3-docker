@@ -35,6 +35,7 @@ RUN rosdep update
 RUN mkdir -p $HOME/create3_ws/src
 WORKDIR $HOME/create3_ws/src
 RUN git clone https://github.com/iRobotEducation/create3_sim.git
+RUN git clone https://github.com/iRobotEducation/create3_examples.git
 WORKDIR $HOME/create3_ws
 RUN vcs import $HOME/create3_ws/src/ < $HOME/create3_ws/src/create3_sim/dependencies.repos
 RUN apt-get update && rosdep install --from-path src -yi --rosdistro galactic
