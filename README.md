@@ -25,4 +25,6 @@ docker login
 ./build-image.sh create3-galactic
 docker tag create3-galactic irobotedu/create3-galactic:0.0.1
 docker push irobotedu/create3-galactic:0.0.1
+docker tag create3-galactic irobotedu/create3-galactic:latest
+docker push irobotedu/create3-galactic:latest
 ```
