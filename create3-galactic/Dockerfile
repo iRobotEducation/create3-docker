@@ -52,21 +52,29 @@ RUN apt-get update && apt-get install -y \
         python3-vcstool \
     && rm -rf /var/lib/apt/lists/*
 
+RUN rosdep update
+
 #######
-# Create3 workspace
+# Create 3 packages
 #######
+
+RUN apt-get update && apt-get install -y \
+        ros-galactic-irobot-create-msgs \
+        ros-galactic-irobot-create-ignition-sim \
+        ros-galactic-irobot-create-gazebo-sim \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p $HOME/create3_ws/src
 WORKDIR $HOME/create3_ws/src
-RUN git clone -b main https://github.com/iRobotEducation/create3_sim.git
 RUN git clone https://github.com/iRobotEducation/create3_examples.git
 WORKDIR $HOME/create3_ws
-RUN vcs import $HOME/create3_ws/src/ < $HOME/create3_ws/src/create3_sim/dependencies.repos
-RUN rosdep update \
-    && apt-get update \
+RUN wget https://raw.githubusercontent.com/iRobotEducation/create3_sim/main/irobot_create_gazebo/demo.repos \
+    && vcs import $HOME/create3_ws/src/ < $HOME/create3_ws/demo.repos \
+    && rm -rf $HOME/create3_ws/demo.repos
+RUN apt-get update \
     && rosdep install --from-path src -yi --rosdistro galactic \
     && rm -rf /var/lib/apt/lists/*
-RUN /bin/bash -c '. /opt/ros/galactic/setup.sh; IGNITION_VERSION=edifice colcon build'
+RUN /bin/bash -c '. /opt/ros/galactic/setup.sh; colcon build'
 
 #######
 # Common utilities
