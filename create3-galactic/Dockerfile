@@ -62,6 +62,7 @@ RUN apt-get update && apt-get install -y \
         ros-galactic-irobot-create-msgs \
         ros-galactic-irobot-create-ignition-sim \
         ros-galactic-irobot-create-gazebo-sim \
+        ros-galactic-irobot-create-nodes \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p $HOME/create3_ws/src
