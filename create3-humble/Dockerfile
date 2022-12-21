@@ -18,7 +18,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN echo \
   'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01norecommend
 
-# Upgrade everything: this is needed to fix some errors in Fast-DDS
+RUN rosdep update
+
+# Upgrade everything
 RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 #######
@@ -34,6 +36,7 @@ RUN curl -sSL http://get.gazebosim.org | sh
 RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
 RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 RUN apt-get update && apt-get install -y \
         ignition-fortress \
         ros-humble-ros-ign-bridge \
@@ -52,8 +55,6 @@ RUN apt-get update && apt-get install -y \
         python3-vcstool \
     && rm -rf /var/lib/apt/lists/*
 
-RUN rosdep update
-
 #######
 # Create 3 packages
 #######
@@ -61,8 +62,6 @@ RUN rosdep update
 RUN mkdir -p $HOME/create3_ws/src
 WORKDIR $HOME/create3_ws/src
 RUN git clone -b asoragna/humble https://github.com/iRobotEducation/create3_sim.git
-RUN git clone -b humble https://github.com/iRobotEducation/irobot_create_msgs
-RUN git clone -b humble https://github.com/ros-controls/gz_ros2_control.git
 WORKDIR $HOME/create3_ws
 RUN apt-get update \
     && rosdep install --from-path src -yi --rosdistro humble \
