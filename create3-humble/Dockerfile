@@ -55,18 +55,33 @@ RUN apt-get update && apt-get install -y \
         python3-vcstool \
     && rm -rf /var/lib/apt/lists/*
 
+# Install foxglove bridge
+RUN apt-get update && apt-get install -y \
+    ros-humble-foxglove-bridge \
+    && rm -rf /var/lib/apt/lists/*
+
 #######
 # Create 3 packages
 #######
 
+RUN apt-get update && apt-get install -y \
+        ros-humble-irobot-create-msgs \
+        ros-humble-irobot-create-ignition-sim \
+        ros-humble-irobot-create-gazebo-sim \
+        ros-humble-irobot-create-nodes \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir -p $HOME/create3_ws/src
 WORKDIR $HOME/create3_ws/src
-RUN git clone -b asoragna/humble https://github.com/iRobotEducation/create3_sim.git
+RUN git clone -b humble https://github.com/iRobotEducation/create3_examples.git
 WORKDIR $HOME/create3_ws
+RUN wget https://raw.githubusercontent.com/iRobotEducation/create3_sim/main/irobot_create_gazebo/demo.repos \
+    && vcs import $HOME/create3_ws/src/ < $HOME/create3_ws/demo.repos \
+    && rm -rf $HOME/create3_ws/demo.repos
 RUN apt-get update \
     && rosdep install --from-path src -yi --rosdistro humble \
     && rm -rf /var/lib/apt/lists/*
-RUN /bin/bash -c '. /opt/ros/humble/setup.sh; IGNITION_VERSION=fortress colcon build'
+RUN /bin/bash -c '. /opt/ros/humble/setup.sh; colcon build'
 
 #######
 # Common utilities
