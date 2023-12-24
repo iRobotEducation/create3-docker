@@ -13,6 +13,8 @@ if [ ! -d "$1" ]; then
 fi
 
 DOCKER_DIR=$1
+# All arguments after the first one are directly passed to the build command
+ADDITIONAL_ARGS=${@:2}
 
 # Build base docker image
 docker build \
@@ -20,4 +22,5 @@ docker build \
   --network=host \
   --pull \
   --tag $DOCKER_DIR \
+  ${ADDITIONAL_ARGS} \
   $DOCKER_DIR
