@@ -2,6 +2,15 @@
 
 Dockerfiles for running ROS 2 applications for the iRobot Create 3 educational robot.
 
+## How to run Docker containers
+
+The Docker images built through this repository are available from the DockerHub.
+The following is an example command used to run it.
+
+```bash
+docker run -it --rm --network=host --privileged -e DISPLAY=$DISPLAY irobotedu/create3-humble
+```
+
 ### Build a Docker image locally
 
 ```bash
@@ -20,18 +29,10 @@ Each Docker image should be placed, together with all the additional files it re
 
 ### Deploying image to Docker Hub
 
- - Login to Docker Hub
- - Build image locally
- - Tag the image
- - Push tag
-
- Full example:
+Use this command to build the current images and deploy them to the DockerHub.
+This command requires the iRobotEDU DockerHub login details.
 
 ```bash
 docker login
-./build-image.sh create3-galactic
-docker tag create3-galactic irobotedu/create3-galactic:0.0.1
-docker push irobotedu/create3-galactic:0.0.1
-docker tag create3-galactic irobotedu/create3-galactic:latest
-docker push irobotedu/create3-galactic:latest
+./deploy.sh create3-humble --platform=linux/arm64,linux/amd64 --latest --version 0.0.2
 ```
