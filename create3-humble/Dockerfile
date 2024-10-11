@@ -75,7 +75,7 @@ RUN mkdir -p $HOME/create3_ws/src
 WORKDIR $HOME/create3_ws/src
 RUN git clone -b humble https://github.com/iRobotEducation/create3_examples.git
 WORKDIR $HOME/create3_ws
-RUN wget https://raw.githubusercontent.com/iRobotEducation/create3_sim/main/irobot_create_gazebo/demo.repos \
+RUN wget https://raw.githubusercontent.com/iRobotEducation/create3_sim/humble/irobot_create_gazebo/demo.repos \
     && vcs import $HOME/create3_ws/src/ < $HOME/create3_ws/demo.repos \
     && rm -rf $HOME/create3_ws/demo.repos
 RUN apt-get update \
